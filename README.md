@@ -54,6 +54,22 @@ For NVIDIA GPU:
 docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 ```
 
+### Pull Required Models After starting the Ollama container, ensure you have the necessary models for generation and embeddings:
+Pull Llama2 Model:
+```bash
+docker exec -it ollama ollama pull llama2
+```
+Pull Embedding Model:
+```bash
+docker exec -it ollama ollama pull embed
+```
+
+Verify the models are downloaded by listing the available models:
+```bash
+docker exec -it ollama ollama list
+```
+
+
 ### Start the Ollama Container
 Build and run the FastAPI container:
 
