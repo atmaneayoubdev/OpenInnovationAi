@@ -1,6 +1,8 @@
 # Technical Challenge for Open Innovation AI
 A document-based GPT system designed to answer questions based on internal documents. Built using FastAPI, Ollama, and LangChain, it provides short, precise, and well-sourced answers with links to document locations.
 
+**GitHub Repository**: [OpenInnovationAi](https://github.com/atmaneayoubdev/OpenInnovationAi)
+
 ---
 
 ## Features
@@ -36,5 +38,30 @@ A document-based GPT system designed to answer questions based on internal docum
 ### Running the System
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/<your-username>/Technical-Challenge-for-Open-Innovation-AI.git
-   cd Technical-Challenge-for-Open-Innovation-AI
+   git clone https://github.com/atmaneayoubdev/OpenInnovationAi.git
+   cd OpenInnovationAi
+
+
+### Start the Ollama Container
+
+For CPU:
+```bash
+docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+```
+
+For NVIDIA GPU:
+```bash
+docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+```
+
+### Start the Ollama Container
+Build and run the FastAPI container:
+
+```bash
+docker build -t open_innovation_ai .
+docker run -d -p 8000:8000 --name open_innovation_ai open_innovation_ai
+```
+
+### Access the API Documentation
+Swagger UI: http://localhost:8000/docs
+
