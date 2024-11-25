@@ -61,7 +61,7 @@ docker exec -it ollama ollama pull llama2
 ```
 Pull Embedding Model:
 ```bash
-docker exec -it ollama ollama pull embed
+docker exec -it ollama ollama pull nomic-embed-text
 ```
 
 Verify the models are downloaded by listing the available models:
