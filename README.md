@@ -59,6 +59,13 @@ docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 ```
 
 For NVIDIA GPU:
+
+1. **Install NVIDIA Drivers**: Ensure that your machine has the correct NVIDIA drivers for your GPU installed. These drivers enable the GPU's interaction with the operating system and applications.
+
+2. **Install CUDA Toolkit**: The CUDA Toolkit provides libraries, compilers, and development tools to access GPU processing. It is required for running GPU-accelerated applications.
+
+3. **Install NVIDIA Container Toolkit**: Docker needs the NVIDIA Container Toolkit to interact with the GPU. This toolkit allows Docker containers to leverage GPU hardware. You can install it by following the instructions from NVIDIA's official documentation [here](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html).
+
 ```bash
 docker run -d --gpus=all -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
 ```
