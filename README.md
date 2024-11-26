@@ -81,3 +81,73 @@ docker run -d -p 8000:8000 --name open_innovation_ai open_innovation_ai
 ### Access the API Documentation
 Swagger UI: http://localhost:8000/docs
 
+
+## Postman Collection
+
+We’ve provided a Postman collection to help you test the API for document handling and querying. The collection contains pre-configured requests for each functionality in your FastAPI application. Below is a breakdown of each endpoint included in the collection.
+
+---
+
+### Steps to Use the Postman Collection
+
+1. **Download the Postman collection** from the link provided: [OpenInnovationAi.postman_collection.json](docs/postman-collection/OpenInnovationAi.postman_collection.json).
+2. **Import the collection** into Postman:
+    - Open Postman and click the "Import" button at the top-left.
+    - Select "File" and upload the `.json` file you downloaded.
+3. Once the collection is imported, you'll see all the predefined API requests set up for easy testing.
+4. You can now start interacting with the API to upload documents, query the system, and test other functionality.
+
+---
+
+### Example Usage
+
+#### 1. **Health Check**
+   - **Request Type**: `GET`
+   - **Endpoint**: `/health-check`
+   - **Purpose**: This request checks the health of the API. It helps verify if the server is running properly.
+   - **How to use**: Simply send a GET request to the `/health-check` endpoint. If the server is running, you should get a response confirming the status.
+
+#### 2. **Get All Documents**
+   - **Request Type**: `GET`
+   - **Endpoint**: `/api/v1/documents`
+   - **Purpose**: This request fetches all the documents stored in the system. 
+   - **How to use**: Send a GET request to this endpoint to retrieve a list of all uploaded documents. This will return document metadata such as file names, document IDs, etc.
+
+#### 3. **Document Upload**
+   - **Request Type**: `POST`
+   - **Endpoint**: `/api/v1/document-upload`
+   - **Purpose**: This request allows you to upload a document to the system.
+   - **How to use**: 
+     - Set the request body to `multipart/form-data`.
+     - Attach the file you want to upload (you can choose a local PDF or text file).
+     - Send the request to this endpoint to upload the document.
+   - **Expected Response**: You’ll receive a confirmation that the document has been successfully uploaded.
+
+#### 4. **Delete Document**
+   - **Request Type**: `POST`
+   - **Endpoint**: `/api/v1/document-upload` (same as upload but performs deletion in your backend logic)
+   - **Purpose**: This request deletes a previously uploaded document from the system.
+   - **How to use**:
+     - Similar to the document upload request, set the body type to `multipart/form-data`.
+     - Attach the file you want to delete (the same document previously uploaded).
+     - Send the request, and the document will be deleted.
+   - **Expected Response**: You will get a confirmation message that the document has been successfully deleted.
+
+#### 5. **Ask Ollama (Query the System)**
+   - **Request Type**: `POST`
+   - **Endpoint**: `/api/v1/ask-ollama`
+   - **Purpose**: This request sends a question to the system, which will query the stored documents and generate an answer using Ollama and Llama2 embeddings.
+   - **How to use**:
+     - Set the request body to raw JSON.
+     - Include the question you want to ask in the JSON body, for example:
+       ```json
+       {
+         "question": "What is Talabat?"
+       }
+       ```
+     - Send the request, and the response will contain an answer based on the documents in the system.
+   - **Expected Response**: You will receive a generated response from the system along with relevant document references (if available).
+
+---
+
+Feel free to adjust the collection as needed for your testing or debugging. By using this collection, you’ll be able to quickly test document uploading, querying, and managing the system’s health through Postman.

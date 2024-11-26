@@ -1,0 +1,158 @@
+{
+	"info": {
+		"_postman_id": "2c9fffce-fb5f-49d5-b196-416406bae06f",
+		"name": "OpenInnovationAi",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "17084316",
+		"_collection_link": "https://bold-space-802563.postman.co/workspace/eData~a2f91167-f1ef-4ffa-b8fd-0fea21987860/collection/17084316-2c9fffce-fb5f-49d5-b196-416406bae06f?action=share&source=collection_link&creator=17084316"
+	},
+	"item": [
+		{
+			"name": "health-check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/health-check",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"health-check"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get all documents",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/documents",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"documents"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "document-upload",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/User/Downloads/TALABAT-HOLDING-PLC-ANNOUNCES-ITS-INTENTION-TO-FLOAT-ON-THE-DUBAI-FINANCIAL-MARKET-DFM.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/document-upload",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"document-upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "delete-document",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/C:/Users/User/Downloads/TALABAT-HOLDING-PLC-ANNOUNCES-ITS-INTENTION-TO-FLOAT-ON-THE-DUBAI-FINANCIAL-MARKET-DFM.pdf"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/document-upload",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"document-upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ask-ollama",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"question\": \"what is talabat ?\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/ask-ollama",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"ask-ollama"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
