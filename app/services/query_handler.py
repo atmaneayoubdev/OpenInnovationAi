@@ -29,7 +29,7 @@ def main(query_text: str):
     query_rag(query_text)
 
 
-def is_question_relevant(results, threshold=0.8):
+def is_question_relevant(results, threshold=1):
     logger.info(f"Checking relevance with threshold: {threshold}")
     # Check if any of the similarity scores are above the threshold
     for _, score in results:
@@ -75,7 +75,7 @@ def query_rag(query_text: str, llm, request: Request):
             )
 
         # Check if the question is relevant to valid results
-        if not is_question_relevant(valid_results, threshold=0.8):
+        if not is_question_relevant(valid_results, threshold=1):
             logger.info(
                 "Question is not relevant to the content of the documents.")
             return {"result": "The question is not related to the content of the documents.", "source_documents": []}
