@@ -43,6 +43,10 @@ A document-based GPT system designed to answer questions based on internal docum
 
 
 ### Start the Ollama Container
+Before running the Ollama container, make sure you have the Ollama image pulled from Docker Hub:
+```bash
+docker pull ollama/ollama
+```
 
 For CPU:
 ```bash
@@ -70,10 +74,12 @@ docker exec -it ollama ollama list
 ```
 
 
-### Start the Ollama Container
+### Start the fastapi Container
 Build and run the FastAPI container:
 
 ```bash
+docker build -f Dockerfile.fastapi -t open_innovation_ai .
+
 docker run -d -p 8000:8000 --name open_innovation_ai open_innovation_ai
 ```
 
