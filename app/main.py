@@ -5,21 +5,19 @@ from fastapi.responses import FileResponse
 from app.api.endpoints import router as endpoints_router
 from app.core.middleware import setup_middleware
 from app.core.logging import configure_logger, logger
-
-DOCUMENTS_PATH = os.path.join("app", "documents")
-VECTORSTORE_PATH = os.path.join("app", "vectorstore")
+from app.core.settings import settings
 
 
 @asynccontextmanager
-async def lifespan(app: FastAPI):
+async def lifespan(app: FastAPI):  # Lifespan context manager for the FastAPI app
     # Setup: Code to run before the app starts handling requests (e.g., loading models)
     print("App is starting... Loading models and resources.")
 
     # Create necessary directories
-    os.makedirs(DOCUMENTS_PATH, exist_ok=True)
-    os.makedirs(VECTORSTORE_PATH, exist_ok=True)
+    os.makedirs(settings.DOCUMENTS_FOLDER, exist_ok=True)
+    os.makedirs(settings.VECTORSTORE_PATH, exist_ok=True)
     logger.info(
-        f"Ensured directories exist: {DOCUMENTS_PATH}, {VECTORSTORE_PATH}")
+        f"Ensured directories exist: {settings.DOCUMENTS_FOLDER}, {settings.VECTORSTORE_PATH}")
 
     yield  # App is running now, handling requests
 
@@ -36,6 +34,7 @@ app = FastAPI(
         "name": "Atmane Ayoub",
         "email": "atmaneayoub10@gmail.com",
     },
+    lifespan=lifespan
 )
 
 configure_logger()
@@ -49,7 +48,7 @@ def home():
     return {"Health Check": "OK"}
 
 
-@app.get("/documents/{filename}")
+@app.get("/documents/{filename}")  # Get a document by filename
 async def get_document(filename: str):
     file_path = os.path.join("app", "documents", filename)
     if os.path.exists(file_path):

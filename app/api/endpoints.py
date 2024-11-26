@@ -1,8 +1,6 @@
-import shutil
 from fastapi import APIRouter, HTTPException, Request
 from fastapi import APIRouter, File, UploadFile, HTTPException
 import os
-
 from langchain_ollama import OllamaLLM
 from app.api.schemas import DeletePDFRequest, QuestionRequest
 from app.core.settings import settings
@@ -14,7 +12,7 @@ router = APIRouter()
 llama_model = OllamaLLM(model="llama2")
 
 
-@router.post("/document-upload")
+@router.post("/document-upload")  # Upload a PDF document to the system
 async def upload_document(file: UploadFile = File(...)):
     try:
         # Check for allowed file extensions
@@ -55,6 +53,7 @@ async def upload_document(file: UploadFile = File(...)):
             status_code=500, detail="An error occurred while uploading the document.")
 
 
+# Delete a PDF file and its associated records from the system
 @router.post("/delete-pdf")
 async def delete_pdf(request: DeletePDFRequest):
     try:
@@ -72,6 +71,7 @@ async def delete_pdf(request: DeletePDFRequest):
             status_code=500, detail=f"An error occurred while deleting records for {request.filename}: {str(e)}")
 
 
+# Clear all documents and embeddings from the system
 @router.post("/clear-data")
 async def clear_data():
     try:
@@ -112,8 +112,12 @@ async def clear_data():
 
 
 @router.get("/documents")
-async def list_documents():
+async def list_documents():  # List all documents in the documents folder
     try:
+        os.makedirs(settings.DOCUMENTS_FOLDER, exist_ok=True)
+        os.makedirs(settings.VECTORSTORE_PATH, exist_ok=True)
+        logger.info(
+            f"Ensured directories exist: {settings.DOCUMENTS_FOLDER}, {settings.VECTORSTORE_PATH}")
         # List all files in the documents folder
         documents = os.listdir(settings.DOCUMENTS_FOLDER)
         all_files = [{"filename": file, "extension": os.path.splitext(
@@ -129,6 +133,7 @@ async def list_documents():
             status_code=500, detail="An error occurred while listing the documents.")
 
 
+# Ask Ollama a question based on the uploaded documents
 @router.post("/ask-ollama")
 async def ask_ollama(request: Request, question_request: QuestionRequest):
     try:

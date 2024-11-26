@@ -122,6 +122,39 @@
 			"response": []
 		},
 		{
+			"name": "clear_data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/ask-ollama",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"ask-ollama"
+					]
+				}
+			},
+			"response": []
+		},
+		{
 			"name": "ask-ollama",
 			"request": {
 				"method": "POST",

@@ -2,7 +2,6 @@ import os
 from fastapi import Request
 from langchain_chroma import Chroma
 from langchain.prompts import ChatPromptTemplate
-from langchain_ollama import OllamaLLM
 from app.services.get_embeddings import get_embedding_function
 from app.core.logging import logger
 from app.core.settings import settings
@@ -30,7 +29,7 @@ def main(query_text: str):
     query_rag(query_text)
 
 
-def is_question_relevant(results, threshold=1.1):
+def is_question_relevant(results, threshold=0.8):
     logger.info(f"Checking relevance with threshold: {threshold}")
     # Check if any of the similarity scores are above the threshold
     for _, score in results:
@@ -43,56 +42,78 @@ def is_question_relevant(results, threshold=1.1):
 def query_rag(query_text: str, llm, request: Request):
     try:
         logger.info("Preparing the database connection.")
-        # Prepare the DB.
         db = get_chroma_client()
 
+        # Log the number of chunks in the database
+        existing_items = db.get(include=[])
+        existing_ids = set(existing_items["ids"])
+        logger.info(f"Number of existing documents in DB: {len(existing_ids)}")
+
+        if len(existing_ids) == 0:
+            logger.info("No documents are present in the database.")
+            return {"result": "No documents are present in the database.", "source_documents": []}
+
         logger.info("Performing similarity search in the database.")
-        # Search the DB.
-        results = db.similarity_search_with_score(query_text, k=2)
+        results = db.similarity_search_with_score(query_text, k=3)
         logger.info(f"Found {len(results)} results.")
 
-        # Check if the question is relevant
-        if not is_question_relevant(results):
+        # Filter results with valid `page_content`
+        valid_results = [
+            (doc, score) for doc, score in results
+            if doc.page_content and isinstance(doc.page_content, str)
+        ]
+        logger.info(f"Number of valid results: {len(valid_results)}")
+
+        if not valid_results:
+            logger.info("No valid documents found with content.")
+            return {"result": "No relevant documents found.", "source_documents": []}
+
+        # Log the scores of valid results
+        for doc, score in valid_results:
+            logger.info(
+                f"Document: {doc.metadata.get('source', 'Unknown Source')}, Score: {score}"
+            )
+
+        # Check if the question is relevant to valid results
+        if not is_question_relevant(valid_results, threshold=0.8):
             logger.info(
                 "Question is not relevant to the content of the documents.")
             return {"result": "The question is not related to the content of the documents.", "source_documents": []}
 
+        # Prepare context text from valid documents
         context_text = "\n\n---\n\n".join(
-            [doc.page_content for doc, _score in results])
-        # context_text = "\n\n---\n\n".join(
-        #     [doc.page_content for doc, _score in results if 'source' not in doc.metadata])
-
+            [doc.page_content for doc, _ in valid_results]
+        )
         logger.info("Context text prepared for the prompt.")
 
-        # Prepare the prompt.
+        # Format the prompt
         prompt = ChatPromptTemplate.from_template(PROMPT_TEMPLATE)
         formatted_prompt = prompt.format(
             context=context_text, question=query_text)
         logger.info("Prompt formatted.")
 
-        # Get the response from the LLM.
+        # Get response from LLM
         response_text = llm.invoke(formatted_prompt)
         logger.info("Response received from the LLM.")
 
-        # Extract sources with page and paragraph details
+        # Prepare source information
         sources = []
-        for doc, _score in results:
+        for doc, _ in valid_results:
             doc_metadata = doc.metadata
             source_id = doc_metadata.get("id", "Unknown ID")
             source_path = doc_metadata.get("source", "Unknown Source")
             filename = os.path.basename(source_path)
 
-            # Extract the page and paragraph from the ID
             source_info = {
-                "source": doc_metadata.get("source", "Unknown Source"),
+                "source": source_path,
                 "page": str(int(doc_metadata.get("page", "Unknown Page")) + 1),
-                "paragraph": str(int(source_id.split(':')[2]) + 1) if len(source_id.split(':')) > 2 else "Unknown Paragraph",
-                "link": f"{request.url.scheme}://{request.url.hostname}:{request.url.port}/documents/{filename}"
+                "paragraph": str(int(source_id.split(':')[2]) + 1)
+                if len(source_id.split(':')) > 2 else "Unknown Paragraph",
+                "link": f"{request.url.scheme}://{request.url.hostname}:{request.url.port}/documents/{filename}",
             }
             sources.append(source_info)
 
         logger.info(f"Sources extracted: {sources}")
-
         return {"result": response_text, "source_documents": sources}
 
     except Exception as e:

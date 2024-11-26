@@ -74,12 +74,27 @@ docker exec -it ollama ollama list
 Build and run the FastAPI container:
 
 ```bash
-docker build -t open_innovation_ai .
 docker run -d -p 8000:8000 --name open_innovation_ai open_innovation_ai
 ```
 
 ### Access the API Documentation
 Swagger UI: http://localhost:8000/docs
+
+---
+
+## Running the Next.js App with Docker
+### Build the Docker Image
+```bash
+docker build -t nextjs-app -f Dockerfile.nextjs ./frontend
+```
+
+### Run the Docker Container
+```bash
+docker run -d --name nextjs-app -p 3000:3000 nextjs-app
+```
+### Access the App
+http://localhost:3000
+
 
 ---
 
@@ -98,25 +113,27 @@ We’ve provided a Postman collection to help you test the API for document hand
 3. Once the collection is imported, you'll see all the predefined API requests set up for easy testing.
 4. You can now start interacting with the API to upload documents, query the system, and test other functionality.
 
+Alternatively, you can use the following link to directly access the Postman collection: [OpenInnovationAi Postman Collection](https://bold-space-802563.postman.co/workspace/eData~a2f91167-f1ef-4ffa-b8fd-0fea21987860/collection/17084316-2c9fffce-fb5f-49d5-b196-416406bae06f?action=share&source=collection_link&creator=17084316)
+
 ---
 
 ### Example Usage
 
 #### 1. **Health Check**
    - **Request Type**: `GET`
-   - **Endpoint**: `/health-check`
+   - **Endpoint**: `http://127.0.0.1:8000/health-check`
    - **Purpose**: This request checks the health of the API. It helps verify if the server is running properly.
    - **How to use**: Simply send a GET request to the `/health-check` endpoint. If the server is running, you should get a response confirming the status.
 
 #### 2. **Get All Documents**
    - **Request Type**: `GET`
-   - **Endpoint**: `/api/v1/documents`
+   - **Endpoint**: `http://127.0.0.1:8000/api/v1/documents`
    - **Purpose**: This request fetches all the documents stored in the system. 
    - **How to use**: Send a GET request to this endpoint to retrieve a list of all uploaded documents. This will return document metadata such as file names, document IDs, etc.
 
 #### 3. **Document Upload**
    - **Request Type**: `POST`
-   - **Endpoint**: `/api/v1/document-upload`
+   - **Endpoint**: `http://127.0.0.1:8000/api/v1/document-upload`
    - **Purpose**: This request allows you to upload a document to the system.
    - **How to use**: 
      - Set the request body to `multipart/form-data`.
@@ -126,7 +143,7 @@ We’ve provided a Postman collection to help you test the API for document hand
 
 #### 4. **Delete Document**
    - **Request Type**: `POST`
-   - **Endpoint**: `/api/v1/document-upload` (same as upload but performs deletion in your backend logic)
+   - **Endpoint**: `http://127.0.0.1:8000/api/v1/document-upload` (same as upload but performs deletion in your backend logic)
    - **Purpose**: This request deletes a previously uploaded document from the system.
    - **How to use**:
      - Similar to the document upload request, set the body type to `multipart/form-data`.
@@ -136,7 +153,7 @@ We’ve provided a Postman collection to help you test the API for document hand
 
 #### 5. **Ask Ollama (Query the System)**
    - **Request Type**: `POST`
-   - **Endpoint**: `/api/v1/ask-ollama`
+   - **Endpoint**: `http://127.0.0.1:8000/api/v1/ask-ollama`
    - **Purpose**: This request sends a question to the system, which will query the stored documents and generate an answer using Ollama and Llama2 embeddings.
    - **How to use**:
      - Set the request body to raw JSON.
@@ -148,6 +165,15 @@ We’ve provided a Postman collection to help you test the API for document hand
        ```
      - Send the request, and the response will contain an answer based on the documents in the system.
    - **Expected Response**: You will receive a generated response from the system along with relevant document references (if available).
+
+#### 6. **Clear Data**
+   - **Request Type**: `POST`
+   - **Endpoint**: `http://127.0.0.1:8000/api/v1/clear-data`
+   - **Purpose**: This request clears all the data in the system.
+   - **How to use**:
+     - Set the request body to raw JSON.
+     - Send the request to clear all data in the system.
+   - **Expected Response**: You will receive a confirmation message that the data has been successfully cleared.
 
 ---
 
