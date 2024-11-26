@@ -42,6 +42,12 @@ A document-based GPT system designed to answer questions based on internal docum
    ```
 
 ### Start the Ollama Container
+If You Have Ollama Server Running Locally
+If you already have the Ollama server running locally, you can skip the steps to start the container. Just ensure that the following models are available on your system:
+
+Llama2 Model for generation
+nomic-embed-text Model for embeddings
+
 Before running the Ollama container, make sure you have the Ollama image pulled from Docker Hub:
 ```bash
 docker pull ollama/ollama
