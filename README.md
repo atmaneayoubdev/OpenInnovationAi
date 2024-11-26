@@ -81,6 +81,7 @@ docker run -d -p 8000:8000 --name open_innovation_ai open_innovation_ai
 ### Access the API Documentation
 Swagger UI: http://localhost:8000/docs
 
+---
 
 ## Postman Collection
 
