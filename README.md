@@ -35,12 +35,11 @@ A document-based GPT system designed to answer questions based on internal docum
 - Docker installed
 - NVIDIA or AMD GPU (optional for accelerated performance)
 
-### Running the System
-1. **Clone the Repository**
+### Clone the Repository
    ```bash
    git clone https://github.com/atmaneayoubdev/OpenInnovationAi.git
    cd OpenInnovationAi
-
+   ```
 
 ### Start the Ollama Container
 Before running the Ollama container, make sure you have the Ollama image pulled from Docker Hub:
@@ -182,5 +181,3 @@ Alternatively, you can use the following link to directly access the Postman col
    - **Expected Response**: You will receive a confirmation message that the data has been successfully cleared.
 
 ---
-
-Feel free to adjust the collection as needed for your testing or debugging. By using this collection, you’ll be able to quickly test document uploading, querying, and managing the system’s health through Postman.
